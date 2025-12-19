@@ -321,7 +321,9 @@ Keep clicking Next until you get to Router (Default Gateway). Type in 172.16.0.1
 
 ## 10) Adding Clients to the Active Directory Domain
 
-You can download this folder 
+download this folder https://github.com/araujopedro0325-alt/active-directory-lab-scripts 
+
+
 
 ---
 
