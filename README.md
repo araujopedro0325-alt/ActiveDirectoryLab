@@ -126,7 +126,7 @@ On the top right of Server Manager. Click on the flag and click on "Promote this
 <img width="1755" height="938" alt="Screenshot 2025-12-18 161933" src="https://github.com/user-attachments/assets/3146bbaf-e8cc-4afd-bf2d-5e8ea2e4799d" />
 <br />
 <br />
-Click Add a new forest and create your root domain name. Example mydomain.com Then click Next<br />
+Click Add a new forest and create your root domain name. Example I"ll create mine to be mydomain.com Then click Next<br />
 <img width="759" height="562" alt="Screenshot 2025-12-18 162611" src="https://github.com/user-attachments/assets/82c83f66-286b-43b7-a4bc-87e2ebfc1198" />
 <br />
 <br />
@@ -187,6 +187,7 @@ Once you are back in Server Manager, on the top right click tools then Routing a
 <br />
 Once you are inside Routing and Remote Access, right click on your server then click on Configurate and Enable Routing and Remote Access <br />
 <img width="621" height="442" alt="Screenshot 2025-12-18 230925" src="https://github.com/user-attachments/assets/045d98b9-7c9f-4675-955a-a10f324da4a4" />
-
-
+<br />
+<br />
+Once you are inside configuration
 
