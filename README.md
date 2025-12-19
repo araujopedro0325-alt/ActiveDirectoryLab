@@ -152,14 +152,16 @@ Right click on the new created Organizational Unit then click "New" then "User"
 <img width="1283" height="661" alt="Screenshot 2025-12-18 210452" src="https://github.com/user-attachments/assets/16984a17-f4fb-4dfb-92b6-63f0d292f904" />
 <br />
 <br />
-
-
-
-
-
-
-
-
-
-
+Put in your First and Last name. For lab purposes, inside User logon name put a- then your first intial of your first name along with your last name. (For example, a-paraujo) then click Next.
+<img width="317" height="272" alt="Screenshot 2025-12-18 210925" src="https://github.com/user-attachments/assets/d9762078-9444-4877-b18d-51135a26d994" />
+<br />
+<br />
+Create a password for your new user account then Uncheck "User must change password at next login" box and check the "Password never expires" box. Then click Next until the Finish button pops up and click on it.
+<img width="320" height="273" alt="Screenshot 2025-12-18 212400" src="https://github.com/user-attachments/assets/ffca9bc0-0795-4dc7-a9b4-119820be791e" />
+<br />
+<br />
+Now to make the new created user an admin, Right click on the user name and choose Properties. Then look for the "Member Of" tab and Write " domain admins " inside of "enter the object names to select (examples).
+<img width="452" height="248" alt="Screenshot 2025-12-18 212648" src="https://github.com/user-attachments/assets/2b681082-5252-4240-8028-f2069273a267" />
+<br />
+<br />
 
