@@ -315,8 +315,13 @@ Keep clicking Next until you get to Lease Duration and you can set it for as lon
 
 <img width="321" height="268" alt="Screenshot 2025-12-19 121650" src="https://github.com/user-attachments/assets/8e287eaf-04f5-485f-80b6-71003baf9e41" />
 
+Keep clicking Next until you get to Router (Default Gateway). Type in 172.16.0.1 and make sure you click Add before clicking Next. Then keep clicking Next and Finish. Then right click the DHCP server and click authorize then right click it again and click Refresh. 
 
+<img width="1051" height="549" alt="Screenshot 2025-12-19 122905" src="https://github.com/user-attachments/assets/844163e2-f1f4-4b3c-bdfa-470934d68813" />
 
+## 10) Adding Clients to the Active Directory Domain
+
+You can download this folder 
 
 ---
 
