@@ -276,9 +276,47 @@ Right-click your server → **Configure and Enable Routing and Remote Access**:
 
 <img width="621" height="442" alt="Configure RRAS" src="https://github.com/user-attachments/assets/045d98b9-7c9f-4675-955a-a10f324da4a4" />
 
-✅ **Continue here:** Finish the wizard by selecting **NAT**, choose the interface that has internet access (your **NAT/Internet** adapter), and enable NAT on it.
+Install NAT to allow internal clients to connect to the Internet using one public IP address.
 
-> I can finish and clean this section once you paste the remaining screenshots/steps after: “Once you are inside configuration…”
+<img width="498" height="421" alt="Screenshot 2025-12-19 102022" src="https://github.com/user-attachments/assets/a350cfaa-c9c2-4223-9999-372c5a860d62" />
+
+Click on Use this public Interface to connect to the internet: choose _INTERNET then click next  (If the box is grayed out, close the window and repeat the steps to get back on this page)
+
+<img width="497" height="424" alt="Screenshot 2025-12-19 102525" src="https://github.com/user-attachments/assets/a4d14315-a328-4282-a2c4-d1ad9960cc08" />
+
+After you click finish, you will see a green arrow on the created server. 
+<img width="622" height="442" alt="Screenshot 2025-12-19 114933" src="https://github.com/user-attachments/assets/deb8847e-9deb-4f6b-88ef-66414bbf24ad" />
+## 10) Installing a DHCP server 
+With an DHCP, clients that connect to the internet will receive an IP address that would allow them to connect to the internet. 
+
+On the server manager, click add roles and features. Click Next until you get to server roles then add DHCP then keep clicking next until the install button pops up. 
+
+
+<img width="495" height="351" alt="Screenshot 2025-12-19 115720" src="https://github.com/user-attachments/assets/d5115306-cfa3-464a-b326-686dc86bf189" />
+
+After the DHCP install is complete and you are back inside Server Manager, click Tools on the top right then click DHCP to create the Scope.
+In DHCP, a scope is basically the range of IP addresses and network settings that a DHCP server is allowed to hand out to devices on a specific network (usually one subnet).
+
+<img width="1754" height="933" alt="Screenshot 2025-12-19 120303" src="https://github.com/user-attachments/assets/c256d3a3-6203-495a-aac1-52c678172b53" />
+
+Right Click on IPv4 and click New Scope. 
+
+<img width="1150" height="769" alt="Screenshot 2025-12-19 120603" src="https://github.com/user-attachments/assets/7d058fb5-6fa6-41b8-b11c-8c3edfd7f2c8" />
+
+For Lab purposes we'll create the scope name 172.16.0.100-200 but you can set name it whatever you want. 
+
+<img width="516" height="420" alt="Screenshot 2025-12-19 120732" src="https://github.com/user-attachments/assets/3a37f06c-08f2-4554-bb41-91ac2d150ddd" />
+
+Again for lab purposes we"ll set up the Start IP Address to 172.16.0.100. Set the End I.P Address to 172.16.0.200. Set lenght to 24 and Subnet mask to 255.255.255.0.
+
+<img width="515" height="424" alt="Screenshot 2025-12-19 121039" src="https://github.com/user-attachments/assets/5750f39e-451d-4bc9-b1a9-579616ec0a2a" />
+
+Keep clicking Next until you get to Lease Duration and you can set it for as long as you want. What lease duration means is that the DHCP will give you an IP address and that IP address will expire after that duration is finished. For example when you log in the wifi for example a cafe, the DHCP will give your device an IP address with a lease duration. So the Cafe doesn't run out of IP addresses, it will most likely have an IP address lease duration for a week and no one can have that same IP address until the lease expires. 
+
+<img width="321" height="268" alt="Screenshot 2025-12-19 121650" src="https://github.com/user-attachments/assets/8e287eaf-04f5-485f-80b6-71003baf9e41" />
+
+
+
 
 ---
 
