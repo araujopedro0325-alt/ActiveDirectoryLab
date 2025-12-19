@@ -138,13 +138,28 @@ Create a password for your domain restore mode then keep clicking Next until the
 <br />
 It will sign you out to create the domain. When you log back in and your user name will change to the domain name you created/Administrator but still use original administrator password.
 <img width="1753" height="934" alt="Screenshot 2025-12-18 164338" src="https://github.com/user-attachments/assets/df1238b8-9b2d-4987-9171-d5ff040faafd" />
+<br />
+<br />
+Now that you are logged in, Click on the windows button at the bottom left and look for Active Directory Users and Computers.
+<img width="1283" height="685" alt="Screenshot 2025-12-18 185648" src="https://github.com/user-attachments/assets/b7d17fde-7176-46c7-9248-6f9cc6a76cbb" />
+<br />
+<br />
+Then right click on your domain and click "New" then click "Organizational Unit" then Name it _ADMINS and click Ok. 
+<img width="1280" height="667" alt="Screenshot 2025-12-18 203956" src="https://github.com/user-attachments/assets/f2f0583c-5371-478e-a7f4-0ca8bab9da06" />
+<br />
+<br />
+Right click on the new created Organizational Unit then click "New" then "User" 
+<img width="1283" height="661" alt="Screenshot 2025-12-18 210452" src="https://github.com/user-attachments/assets/16984a17-f4fb-4dfb-92b6-63f0d292f904" />
+<br />
+<br />
 
-<!--
- ```diff
-- text in red
-+ text in green
-! text in orange
-# text in gray
-@@ text in purple (and bold)@@
-```
---!>
+
+
+
+
+
+
+
+
+
+
