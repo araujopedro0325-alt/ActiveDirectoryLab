@@ -1,7 +1,5 @@
 <h1>Active Directory Home Lab</h1>
 
- ### [YouTube Demonstration](https://youtu.be/7eJexJVCqJo)
-
 <h2>Description</h2>
 VirtualBox-based AD DS lab featuring a Windows Server domain controller, DNS-based domain services, isolated virtual networking, user account management, and a Windows client VM domain join to validate authentication and connectivity.
 <br />
@@ -47,7 +45,7 @@ Start VM: <br/>
 <img width="560" height="548" alt="Start VM" src="https://github.com/user-attachments/assets/40e2d2fa-c9c5-47c8-a241-85d05a565172" />
 <br />
 <br />
-Search For 2019 Server ISO: <br/>
+Search For 2019 Server ISO then click on Mount and Retry Boot : <br/>
 <img width="487" height="176" alt="Server 2019 ISO" src="https://github.com/user-attachments/assets/55ada9b3-b2b0-4268-82a1-4e9edc065bab" />
 <br />
 <br />
@@ -128,7 +126,7 @@ On the top right of Server Manager. Click on the flag and click on "Promote this
 <img width="1755" height="938" alt="Screenshot 2025-12-18 161933" src="https://github.com/user-attachments/assets/3146bbaf-e8cc-4afd-bf2d-5e8ea2e4799d" />
 <br />
 <br />
-Click Add a new forest and create your root domain name. Example mydomain.com Then click Next.
+Click Add a new forest and create your root domain name. Example mydomain.com Then click Next<br />
 <img width="759" height="562" alt="Screenshot 2025-12-18 162611" src="https://github.com/user-attachments/assets/82c83f66-286b-43b7-a4bc-87e2ebfc1198" />
 <br />
 <br />
@@ -148,20 +146,43 @@ Then right click on your domain and click "New" then click "Organizational Unit"
 <img width="1280" height="667" alt="Screenshot 2025-12-18 203956" src="https://github.com/user-attachments/assets/f2f0583c-5371-478e-a7f4-0ca8bab9da06" />
 <br />
 <br />
-Right click on the new created Organizational Unit then click "New" then "User" 
+Right click on the new created Organizational Unit then click "New" then "User" <br />
 <img width="1283" height="661" alt="Screenshot 2025-12-18 210452" src="https://github.com/user-attachments/assets/16984a17-f4fb-4dfb-92b6-63f0d292f904" />
 <br />
 <br />
-Put in your First and Last name. For lab purposes, inside User logon name put a- then your first intial of your first name along with your last name. (For example, a-paraujo) then click Next.
+Put in your First and Last name. For lab purposes, inside User logon name put a- then your first intial of your first name along with your last name. (For example, a-paraujo) then click Next <br />
 <img width="317" height="272" alt="Screenshot 2025-12-18 210925" src="https://github.com/user-attachments/assets/d9762078-9444-4877-b18d-51135a26d994" />
 <br />
 <br />
-Create a password for your new user account then Uncheck "User must change password at next login" box and check the "Password never expires" box. Then click Next until the Finish button pops up and click on it.
+Create a password for your new user account then Uncheck "User must change password at next login" box and check the "Password never expires" box. Then click Next until the Finish button pops up and click on it<br />
 <img width="320" height="273" alt="Screenshot 2025-12-18 212400" src="https://github.com/user-attachments/assets/ffca9bc0-0795-4dc7-a9b4-119820be791e" />
 <br />
 <br />
-Now to make the new created user an admin, Right click on the user name and choose Properties. Then look for the "Member Of" tab and Write " domain admins " inside of "enter the object names to select (examples).
+Now to make the new created user an admin, Right click on the user name and choose Properties. Then look for the "Member Of" tab and Write " domain admins " inside of "enter the object names to select (examples). Then click Ok then "Apply" then Ok <br />
 <img width="452" height="248" alt="Screenshot 2025-12-18 212648" src="https://github.com/user-attachments/assets/2b681082-5252-4240-8028-f2069273a267" />
 <br />
 <br />
+Then click on the Windows button then at the User Icon and Sign Out <br />
+<img width="473" height="498" alt="Screenshot 2025-12-18 220856" src="https://github.com/user-attachments/assets/659d7b61-34b3-407f-8f48-0b28bb9fb186" />
+<br />
+<br />
+Now that you are back into the log in page, click on the botton left where it says Other User and put in your new user name and password. For example, my username would be a-paraujo<br />
+<img width="1283" height="678" alt="Screenshot 2025-12-18 221255" src="https://github.com/user-attachments/assets/8fed75bc-7388-4b02-9859-8fcbddd9113f" />
+<br />
+<br />
+<h2 style="color:red;">Installing RAS/NAS (Remote Access Network/Network Address Translation)</h2>
+<br />
+<br />
+Open Up Server Manager and click on "Add roles and features" then click Next until you get to the Select server roles page. Then look for "Remote Access" and click on it then keep pressing Next Until you get to "Role Services" 
+<img width="922" height="688" alt="Screenshot 2025-12-18 222454" src="https://github.com/user-attachments/assets/5609071a-5e64-4be2-adca-005dd44e3e12" />
+<br />
+<br />
+Once you get to Role Services, click on Routing box and it will also check the DirectAcess and VPN(RAS) box 
+<img width="573" height="407" alt="Screenshot 2025-12-18 223610" src="https://github.com/user-attachments/assets/1185a5ed-28af-4921-938c-a089bc1d0477" />
+
+
+
+
+
+
 
