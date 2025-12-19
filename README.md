@@ -177,12 +177,16 @@ Open Up Server Manager and click on "Add roles and features" then click Next unt
 <img width="922" height="688" alt="Screenshot 2025-12-18 222454" src="https://github.com/user-attachments/assets/5609071a-5e64-4be2-adca-005dd44e3e12" />
 <br />
 <br />
-Once you get to Role Services, click on Routing box and it will also check the DirectAcess and VPN(RAS) box 
+Once you get to Role Services, click on Routing box and it will also check the DirectAcess and VPN(RAS) box then click next twice then install. 
 <img width="573" height="407" alt="Screenshot 2025-12-18 223610" src="https://github.com/user-attachments/assets/1185a5ed-28af-4921-938c-a089bc1d0477" />
-
-
-
-
+<br />
+<br />
+Once you are back in Server Manager, on the top right click tools then Routing and Remote Acess <br />
+<img width="1284" height="665" alt="Screenshot 2025-12-18 230458" src="https://github.com/user-attachments/assets/7d8e7c24-9a1d-4d28-bf53-5d974ae0a1f3" />
+<br />
+<br />
+Once you are inside Routing and Remote Access, right click on your server then click on Configurate and Enable Routing and Remote Access <br />
+<img width="621" height="442" alt="Screenshot 2025-12-18 230925" src="https://github.com/user-attachments/assets/045d98b9-7c9f-4675-955a-a10f324da4a4" />
 
 
 
