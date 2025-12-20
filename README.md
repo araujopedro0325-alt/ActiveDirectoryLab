@@ -67,7 +67,7 @@ Even if you’re not “tech savvy,” this lab teaches core IT concepts used in
 
 ---
 
-## Lab overview (plain English)
+## Lab overview 
 You’re building a “mini company network” on your computer:
 
 1. Create a Server VM
