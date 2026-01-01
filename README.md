@@ -1,7 +1,7 @@
 <h1 align="center">Active Directory Home Lab (VirtualBox)</h1>
 
 <p align="center">
-A beginner-friendly home lab that teaches the fundamentals of <b>Active Directory</b> by building a real Windows Server Domain Controller, configuring DNS + networking, creating users/OUs, and joining a Windows 10 client to the domain.
+A beginner-friendly home lab that teaches the fundamentals of <b>Active Directory</b> by building a real Windows Server Domain Controller, configuring DNS + routing, deploying DHCP, creating users/OUs with PowerShell, and joining a Windows 10 client to the domain.
 </p>
 
 <p align="center">
@@ -10,23 +10,37 @@ A beginner-friendly home lab that teaches the fundamentals of <b>Active Director
   <a href="https://www.microsoft.com/en-us/software-download/windows10ISO">Windows 10 ISO</a>
 </p>
 
+<p align="center">
+  <a href="https://github.com/araujopedro0325-alt/ActiveDirectoryLab/archive/refs/heads/main.zip"><b>⬇️ Download Repo (ZIP)</b></a>
+  &nbsp;•&nbsp;
+  <a href="https://codeload.github.com/araujopedro0325-alt/ActiveDirectoryLab/zip/refs/heads/main"><b>⬇️ Direct Download (Codeload)</b></a>
+</p>
+
 ---
 
 ## Table of Contents
 - [What this lab is](#what-this-lab-is)
 - [What you’ll learn](#what-youll-learn)
 - [Tools & environments](#tools--environments)
-- [Lab overview (plain English)](#lab-overview-plain-english)
+- [Lab overview](#lab-overview)
+- [Network layout (simple diagram)](#network-layout-simple-diagram)
 - [Step-by-step walkthrough](#step-by-step-walkthrough)
   - [1) Downloads](#1-downloads)
   - [2) Create the Server VM](#2-create-the-server-vm)
   - [3) Configure networking (NAT + Internal)](#3-configure-networking-nat--internal)
   - [4) Install Windows Server 2019 (Desktop Experience)](#4-install-windows-server-2019-desktop-experience)
   - [5) Install VirtualBox Guest Additions](#5-install-virtualbox-guest-additions)
-  - [6) Assign a static IP to the domain controller](#6-assign-a-static-ip-to-the-domain-controller)
+  - [6) Assign a static IP to the Domain Controller](#6-assign-a-static-ip-to-the-domain-controller)
   - [7) Install AD DS and promote to Domain Controller](#7-install-ad-ds-and-promote-to-domain-controller)
-  - [8) Create OU + user and add to Domain Admins](#8-create-ou--user-and-add-to-domain-admins)
-  - [9) Install and configure RRAS (NAT)](#9-install-and-configure-rras-nat)
+  - [8) Create OU and user, then add to Domain Admins](#step-8)
+  - [9) Configure RRAS (NAT)](#9-configure-rras-nat)
+  - [10) Install DHCP + Create a Scope](#10-install-dhcp--create-a-scope)
+  - [11) Create bulk users with PowerShell](#11-create-bulk-users-with-powershell)
+  - [12) Create the Windows 10 Client VM](#12-create-the-windows-10-client-vm)
+  - [13) Join the Client to the Domain](#13-join-the-client-to-the-domain)
+- [Scripts (click to view)](#scripts-click-to-view)
+- [Project structure](#project-structure)
+- [Resume-ready bullets](#resume-ready-bullets)
 - [Troubleshooting](#troubleshooting)
 - [Roadmap / Next steps](#roadmap--next-steps)
 - [Disclaimer](#disclaimer)
@@ -34,31 +48,30 @@ A beginner-friendly home lab that teaches the fundamentals of <b>Active Director
 ---
 
 ## What this lab is
-This project is a **home lab** built in **Oracle VirtualBox** that simulates a real enterprise setup:
+This project simulates a real business network using VirtualBox:
 
-- A **Windows Server 2019** virtual machine becomes the **Domain Controller (DC)**
+- A **Windows Server 2019** VM becomes the **Domain Controller (DC)**
 - The DC provides **Active Directory Domain Services (AD DS)** and **DNS**
-- The DC has **two network adapters**:
-  - **Adapter 1 (NAT)**: gives the server internet access
-  - **Adapter 2 (Internal Network)**: creates a private lab network for domain traffic
-- A **Windows 10** client VM will later be joined to the domain to validate authentication and connectivity
+- The DC uses **two network adapters**:
+  - **Adapter 1 (NAT)**: internet access for the server
+  - **Adapter 2 (Internal Network)**: isolated lab network for domain traffic
+- A **Windows 10** VM is created and **joined to the domain**
 
 ---
 
 ## What you’ll learn
-Even if you’re not “tech savvy,” this lab teaches core IT concepts used in most corporate networks:
-
-- What a **Domain Controller** is and why companies use it
-- How **DNS** helps computers find services like a domain controller
-- How to create **Organizational Units (OUs)** and **Users**
-- How **domain authentication** works (logging in with domain accounts)
-- Why labs often use **NAT + Internal networks** to safely isolate environments
+- What a **Domain Controller** is and why organizations use it
+- How **DNS** enables domain authentication and service discovery
+- How to create **OUs**, **users**, and **admin groups**
+- How **RRAS (NAT)** routes internal traffic to the internet
+- How **DHCP** assigns IP addresses automatically to clients
+- How to run beginner-friendly **PowerShell scripts** to bulk-create users
 
 ---
 
 ## Tools & environments
 ### Languages / Utilities
-- **PowerShell** (light usage; mostly Windows GUI steps)
+- **PowerShell** (used for bulk user creation)
 
 ### Environment
 - **Windows Server 2019**
@@ -67,17 +80,40 @@ Even if you’re not “tech savvy,” this lab teaches core IT concepts used in
 
 ---
 
-## Lab overview 
+## Lab overview
 You’re building a “mini company network” on your computer:
 
 1. Create a Server VM
 2. Install Windows Server
-3. Give the Server a **static IP** on the internal network
-4. Install **Active Directory Domain Services**
-5. Promote the server to a Domain Controller (creates your domain)
-6. Create users and admin accounts
-7. Enable **RRAS/NAT** so internal clients can reach the internet if needed
-8. (Next) Join a Windows 10 VM to the domain
+3. Assign a **static IP** on the internal network
+4. Install **AD DS** and promote to a Domain Controller
+5. Create OUs + users (manual + PowerShell)
+6. Configure **RRAS/NAT**
+7. Install **DHCP** and create a scope
+8. Create a Windows 10 client and **join it to the domain**
+
+---
+
+## Network layout (simple diagram)
+**Why two adapters?** NAT gives internet. Internal Network keeps the lab isolated and realistic.
+
+            (Internet)
+               |
+          [NAT Adapter]
+               |
+  +---------------------------+
+  |  Windows Server 2019 DC   |
+  |  AD DS + DNS + RRAS + DHCP|
+  |  Internal IP: 172.16.0.1  |
+  +---------------------------+
+               |
+      [Internal Network]
+               |
+  +---------------------------+
+  |     Windows 10 Client     |
+  | Gets IP from DHCP scope   |
+  | Joins mydomain.com        |
+  +---------------------------+
 
 ---
 
@@ -98,6 +134,7 @@ Create a new VM for Windows Server 2019.
 ---
 
 ## 3) Configure networking (NAT + Internal)
+
 ### VM hardware settings
 > Tip: RAM and CPU can be increased based on your computer’s resources.
 
@@ -114,6 +151,7 @@ Create a new VM for Windows Server 2019.
 ---
 
 ## 4) Install Windows Server 2019 (Desktop Experience)
+
 Start the VM:
 
 <img width="560" height="548" alt="Start VM" src="https://github.com/user-attachments/assets/40e2d2fa-c9c5-47c8-a241-85d05a565172" />
@@ -122,8 +160,7 @@ Mount the Server 2019 ISO:
 
 <img width="487" height="176" alt="Server 2019 ISO mount" src="https://github.com/user-attachments/assets/55ada9b3-b2b0-4268-82a1-4e9edc065bab" />
 
-✅ **Important:** Select **Desktop Experience** (GUI).  
-If you select the non-GUI option, you’ll get a command-line-only server.
+✅ **Important:** Select **Desktop Experience** (GUI).
 
 <img width="1022" height="786" alt="Desktop Experience selection" src="https://github.com/user-attachments/assets/0325d003-0563-4f21-9cad-1280d4c39c96" />
 
@@ -131,7 +168,7 @@ Choose **Custom: Install Windows only (Advanced)**:
 
 <img width="1026" height="790" alt="Custom install" src="https://github.com/user-attachments/assets/ef49be39-3718-4911-a2ef-0a1bed7cb58e" />
 
-After the restart: **don’t press any keys**—let it boot to Windows.
+After restart: **don’t press keys**—let it boot into Windows.
 
 <img width="1021" height="786" alt="Let it boot" src="https://github.com/user-attachments/assets/2a69c235-f5ac-46a0-844c-c9d596ed8b49" />
 
@@ -150,8 +187,6 @@ Log in:
 ---
 
 ## 5) Install VirtualBox Guest Additions
-This improves screen resizing, mouse integration, and overall VM performance.
-
 Devices → **Insert Guest Additions CD Image**:
 
 <img width="1919" height="1129" alt="Guest Additions" src="https://github.com/user-attachments/assets/88059558-6653-4e41-8c4f-c4fb99fe20b9" />
@@ -160,16 +195,15 @@ Open **This PC → CD Drive (D) VirtualBox Guest Additions**:
 
 <img width="1236" height="839" alt="Guest Additions drive" src="https://github.com/user-attachments/assets/c32938cb-3a77-41aa-b140-223086a26dae" />
 
-Run the **amd64** installer, complete the setup, then **Reboot later**, shut down the VM, and start it again:
+Run the **amd64** installer, then reboot the VM:
 
 <img width="1241" height="845" alt="Guest Additions installer" src="https://github.com/user-attachments/assets/489541b6-4152-4e08-a3f0-8d4dac86394b" />
 
 ---
 
-## 6) Assign a static IP to the domain controller
-A domain controller should use a static internal IP so clients can always find it.
+## 6) Assign a static IP to the Domain Controller
 
-Open network settings and go to **Change adapter options**:
+Open network settings → **Change adapter options**:
 
 <img width="1752" height="938" alt="Network settings" src="https://github.com/user-attachments/assets/c2cc4ac3-c7a4-4857-b43f-166637528f7f" />
 <img width="1022" height="799" alt="Change adapter options" src="https://github.com/user-attachments/assets/fd923f3f-a5f5-4937-9fed-b1f568576b8b" />
@@ -180,21 +214,22 @@ Rename adapters:
 
 <img width="1408" height="801" alt="Rename adapters" src="https://github.com/user-attachments/assets/5b54cd63-a653-4e0f-b62e-17d5f7ab2ec2" />
 
-Open properties for **X_Internal_X** and edit IPv4:
+Set IPv4 on **X_Internal_X**:
 
 <img width="1710" height="841" alt="IPv4 properties" src="https://github.com/user-attachments/assets/dd653ce0-b48a-4bc7-9eda-9cd8ea5afa32" />
 
-Example lab IP settings:
+Example lab settings:
 - IP: **172.16.0.1**
 - Subnet: **255.255.255.0**
-- DNS: **127.0.0.1** (loopback; points back to this server’s DNS service)
+- DNS: **127.0.0.1**
 
 <img width="398" height="454" alt="Static IP example" src="https://github.com/user-attachments/assets/37809d0a-7473-456a-a21f-c77ff5bd9f3b" />
 
 ---
 
 ## 7) Install AD DS and promote to Domain Controller
-Open **Server Manager** → **Add roles and features**:
+
+Server Manager → **Add roles and features**:
 
 <img width="1754" height="936" alt="Add roles and features" src="https://github.com/user-attachments/assets/a8cbcb22-b827-41d0-928e-51685e246b06" />
 
@@ -202,285 +237,293 @@ Select **Active Directory Domain Services**:
 
 <img width="785" height="561" alt="Select AD DS" src="https://github.com/user-attachments/assets/612412ad-e43c-45bd-a3ab-03efe7f924d7" />
 
-Install, then in Server Manager click the **flag** → **Promote this server to a domain controller**:
+Server Manager flag → **Promote this server to a domain controller**:
 
 <img width="1755" height="938" alt="Promote to domain controller" src="https://github.com/user-attachments/assets/3146bbaf-e8cc-4afd-bf2d-5e8ea2e4799d" />
 
-Choose **Add a new forest** and create a root domain name (example: `mydomain.com`):
+Create a new forest (example `mydomain.com`):
 
 <img width="759" height="562" alt="New forest" src="https://github.com/user-attachments/assets/82c83f66-286b-43b7-a4bc-87e2ebfc1198" />
 
-Set the Directory Services Restore Mode (DSRM) password, continue, then install:
+Set DSRM password and install:
 
 <img width="239" height="176" alt="DSRM password" src="https://github.com/user-attachments/assets/c0785af8-6ab1-45b4-b2ab-3f63bba88243" />
 
-After the reboot/sign-out, your login will show:
-`DOMAIN\Administrator` (use your original Administrator password)
+Login format becomes `DOMAIN\Administrator`:
 
 <img width="1753" height="934" alt="Domain login" src="https://github.com/user-attachments/assets/df1238b8-9b2d-4987-9171-d5ff040faafd" />
 
 ---
+<a id="step-8"></a>
 
-## 8) Create OU + user and add to Domain Admins
-Open **Active Directory Users and Computers**:
+8) Create OU and user, then add to Domain Admins
+
+Open Active Directory Users and Computers:
 
 <img width="1283" height="685" alt="AD Users and Computers" src="https://github.com/user-attachments/assets/b7d17fde-7176-46c7-9248-6f9cc6a76cbb" />
 
-Create an OU named `_ADMINS`:
+Create OU _ADMINS:
 
 <img width="1280" height="667" alt="Create OU" src="https://github.com/user-attachments/assets/f2f0583c-5371-478e-a7f4-0ca8bab9da06" />
 
-Create a new user inside `_ADMINS`:
+Create user inside _ADMINS:
 
 <img width="1283" height="661" alt="Create user" src="https://github.com/user-attachments/assets/16984a17-f4fb-4dfb-92b6-63f0d292f904" />
 
-Naming idea for lab users:
-- `a-firstinitiallastname` (example: `a-paraujo`)
+Example naming:
+
+a-firstinitiallastname (example: a-paraujo)
 
 <img width="317" height="272" alt="User logon name" src="https://github.com/user-attachments/assets/d9762078-9444-4877-b18d-51135a26d994" />
 
-For lab simplicity:
-- Uncheck **User must change password at next login**
-- Check **Password never expires**
+Set password options:
 
 <img width="320" height="273" alt="Password options" src="https://github.com/user-attachments/assets/ffca9bc0-0795-4dc7-a9b4-119820be791e" />
 
-Add the user to **Domain Admins**:
-User Properties → **Member Of** → add `Domain Admins`
+Add to Domain Admins:
 
 <img width="452" height="248" alt="Member Of domain admins" src="https://github.com/user-attachments/assets/2b681082-5252-4240-8028-f2069273a267" />
 
-Sign out and log in with the new domain user:
+Sign out and log in as the new domain user:
 
-<img width="473" height="498" alt="Sign out" src="https://github.com/user-attachments/assets/659d7b61-34b3-407f-8f48-0b28bb9fb186" />
-<img width="1283" height="678" alt="Other user login" src="https://github.com/user-attachments/assets/8fed75bc-7388-4b02-9859-8fcbddd9113f" />
-
+<img width="473" height="498" alt="Sign out" src="https://github.com/user-attachments/assets/659d7b61-34b3-407f-8f48-0b28bb9fb186" /> <img width="1283" height="678" alt="Other user login" src="https://github.com/user-attachments/assets/8fed75bc-7388-4b02-9859-8fcbddd9113f" /> ```
 ---
 
-## 9) Install and configure RRAS (NAT)
-RRAS helps internal clients route out to the internet (useful for updates/tools), while keeping the lab network isolated.
+## 9) Configure RRAS (NAT)
 
-Server Manager → Add roles and features → select **Remote Access**:
+Server Manager → Add roles → **Remote Access**:
 
 <img width="922" height="688" alt="Remote access role" src="https://github.com/user-attachments/assets/5609071a-5e64-4be2-adca-005dd44e3e12" />
 
-Under Role Services, select **Routing** (it may also check DirectAccess/VPN):
+Select **Routing**:
 
 <img width="573" height="407" alt="Routing role service" src="https://github.com/user-attachments/assets/1185a5ed-28af-4921-938c-a089bc1d0477" />
 
-Server Manager → Tools → **Routing and Remote Access**:
+Tools → **Routing and Remote Access**:
 
 <img width="1284" height="665" alt="Routing and remote access tool" src="https://github.com/user-attachments/assets/7d8e7c24-9a1d-4d28-bf53-5d974ae0a1f3" />
 
-Right-click your server → **Configure and Enable Routing and Remote Access**:
+Configure and enable:
 
 <img width="621" height="442" alt="Configure RRAS" src="https://github.com/user-attachments/assets/045d98b9-7c9f-4675-955a-a10f324da4a4" />
 
-Install NAT to allow internal clients to connect to the Internet using one public IP address.
+Choose **NAT**:
 
-<img width="498" height="421" alt="Screenshot 2025-12-19 102022" src="https://github.com/user-attachments/assets/a350cfaa-c9c2-4223-9999-372c5a860d62" />
+<img width="498" height="421" alt="NAT wizard" src="https://github.com/user-attachments/assets/a350cfaa-c9c2-4223-9999-372c5a860d62" />
 
-Click on Use this public Interface to connect to the internet: choose _INTERNET then click next  (If the box is grayed out, close the window and repeat the steps to get back on this page)
+Select **Use this public interface to connect to the Internet** → choose **Internet** → Next  
+> If the box is grayed out, close the wizard and repeat the RRAS steps.
 
-<img width="497" height="424" alt="Screenshot 2025-12-19 102525" src="https://github.com/user-attachments/assets/a4d14315-a328-4282-a2c4-d1ad9960cc08" />
+<img width="497" height="424" alt="Public interface selection" src="https://github.com/user-attachments/assets/a4d14315-a328-4282-a2c4-d1ad9960cc08" />
 
-After you click finish, you will see a green arrow on the created server. 
-<img width="622" height="442" alt="Screenshot 2025-12-19 114933" src="https://github.com/user-attachments/assets/deb8847e-9deb-4f6b-88ef-66414bbf24ad" />
-## 10) Installing a DHCP server 
-With an DHCP, clients that connect to the internet will receive an IP address that would allow them to connect to the internet. 
+Green arrow confirms RRAS is running:
 
-On the server manager, click add roles and features. Click Next until you get to server roles then add DHCP then keep clicking next until the install button pops up. 
+<img width="622" height="442" alt="RRAS running" src="https://github.com/user-attachments/assets/deb8847e-9deb-4f6b-88ef-66414bbf24ad" />
 
+---
 
-<img width="495" height="351" alt="Screenshot 2025-12-19 115720" src="https://github.com/user-attachments/assets/d5115306-cfa3-464a-b326-686dc86bf189" />
+## 10) Install DHCP + Create a Scope
 
-After the DHCP install is complete and you are back inside Server Manager, click Tools on the top right then click DHCP to create the Scope.
-In DHCP, a scope is basically the range of IP addresses and network settings that a DHCP server is allowed to hand out to devices on a specific network (usually one subnet).
+Server Manager → Add roles → **DHCP Server** → Install.
 
-<img width="1754" height="933" alt="Screenshot 2025-12-19 120303" src="https://github.com/user-attachments/assets/c256d3a3-6203-495a-aac1-52c678172b53" />
+<img width="495" height="351" alt="Install DHCP" src="https://github.com/user-attachments/assets/d5115306-cfa3-464a-b326-686dc86bf189" />
 
-Right Click on IPv4 and click New Scope. 
+Tools → **DHCP** → create scope under IPv4.
 
-<img width="1150" height="769" alt="Screenshot 2025-12-19 120603" src="https://github.com/user-attachments/assets/7d058fb5-6fa6-41b8-b11c-8c3edfd7f2c8" />
+<img width="1754" height="933" alt="DHCP tool" src="https://github.com/user-attachments/assets/c256d3a3-6203-495a-aac1-52c678172b53" />
 
-For Lab purposes we'll create the scope name 172.16.0.100-200 but you can set name it whatever you want. 
+Right click **IPv4** → **New Scope**:
 
-<img width="516" height="420" alt="Screenshot 2025-12-19 120732" src="https://github.com/user-attachments/assets/3a37f06c-08f2-4554-bb41-91ac2d150ddd" />
+<img width="1150" height="769" alt="New scope" src="https://github.com/user-attachments/assets/7d058fb5-6fa6-41b8-b11c-8c3edfd7f2c8" />
 
-Again for lab purposes we"ll set up the Start IP Address to 172.16.0.100. Set the End I.P Address to 172.16.0.200. Set lenght to 24 and Subnet mask to 255.255.255.0.
+Example scope name:
 
-<img width="515" height="424" alt="Screenshot 2025-12-19 121039" src="https://github.com/user-attachments/assets/5750f39e-451d-4bc9-b1a9-579616ec0a2a" />
+<img width="516" height="420" alt="Scope name" src="https://github.com/user-attachments/assets/3a37f06c-08f2-4554-bb41-91ac2d150ddd" />
 
-Keep clicking Next until you get to Lease Duration and you can set it for as long as you want. What lease duration means is that the DHCP will give you an IP address and that IP address will expire after that duration is finished. For example when you log in the wifi for example a cafe, the DHCP will give your device an IP address with a lease duration. So the Cafe doesn't run out of IP addresses, it will most likely have an IP address lease duration for a week and no one can have that same IP address until the lease expires. 
+Example scope range:
+- Start: **172.16.0.100**
+- End: **172.16.0.200**
+- Mask: **255.255.255.0**
 
-<img width="321" height="268" alt="Screenshot 2025-12-19 121650" src="https://github.com/user-attachments/assets/8e287eaf-04f5-485f-80b6-71003baf9e41" />
+<img width="515" height="424" alt="Scope range" src="https://github.com/user-attachments/assets/5750f39e-451d-4bc9-b1a9-579616ec0a2a" />
 
-Keep clicking Next until you get to Router (Default Gateway). Type in 172.16.0.1 and make sure you click Add before clicking Next. Then keep clicking Next and Finish. Then right click the DHCP server and click authorize then right click it again and click Refresh. 
+Lease duration explanation:
 
-<img width="1051" height="549" alt="Screenshot 2025-12-19 122905" src="https://github.com/user-attachments/assets/844163e2-f1f4-4b3c-bdfa-470934d68813" />
+<img width="321" height="268" alt="Lease duration" src="https://github.com/user-attachments/assets/8e287eaf-04f5-485f-80b6-71003baf9e41" />
 
-## 10) Adding Clients to the Active Directory Domain
+Router (Default Gateway): **172.16.0.1** → click **Add** → Finish.  
+Then **Authorize** the DHCP server and **Refresh**.
 
-download this folder https://codeload.github.com/araujopedro0325-alt/ActiveDirectoryLab/zip/refs/heads/main
+<img width="1051" height="549" alt="Authorize DHCP" src="https://github.com/user-attachments/assets/844163e2-f1f4-4b3c-bdfa-470934d68813" />
 
-Open up Internet Explorer, Paste link and save the file to Desktop 
+---
 
-<br /> 
+## 11) Create bulk users with PowerShell
 
-Open the files and click on the file where it says names.txt
+Download the repo ZIP:
+- https://codeload.github.com/araujopedro0325-alt/ActiveDirectoryLab/zip/refs/heads/main
 
-<img width="629" height="116" alt="Screenshot 2026-01-01 144116" src="https://github.com/user-attachments/assets/2e738ee6-c307-42cb-bd7a-f5b0d0a7b7c2" />
+Open the extracted folder and edit `names.txt` (add first + last names), then save:
 
-Write your first and last name to the list then click save. This is the list of users we are going to add to the domain. 
+<img width="629" height="116" alt="Open names.txt" src="https://github.com/user-attachments/assets/2e738ee6-c307-42cb-bd7a-f5b0d0a7b7c2" />
+<img width="1430" height="706" alt="Edit names.txt" src="https://github.com/user-attachments/assets/de0ef38e-88db-40be-89b8-261cbd3fb00e" />
 
-<img width="1430" height="706" alt="Screenshot 2026-01-01 143928" src="https://github.com/user-attachments/assets/de0ef38e-88db-40be-89b8-261cbd3fb00e" />
+Run **PowerShell ISE as Administrator**:
 
-Click the Windows button then right click on Windows Powershell ISE and Run as Administrator 
+<img width="1920" height="955" alt="Run ISE as admin" src="https://github.com/user-attachments/assets/5a115a8b-2ebd-44ee-89a0-2ccbe2176a0a" />
 
-<img width="1920" height="955" alt="VirtualBox_DC _01_01_2026_12_13_57" src="https://github.com/user-attachments/assets/5a115a8b-2ebd-44ee-89a0-2ccbe2176a0a" />
+Open `1_CREATE_USERS.ps1`:
 
-Once you are inside Powershel open the saved file and click on 1_CREATE_USERS 
+<img width="630" height="342" alt="Open script" src="https://github.com/user-attachments/assets/52447245-3a49-4d36-ab46-45a8bf676834" />
 
-<img width="630" height="342" alt="Screenshot 2025-12-20 165939" src="https://github.com/user-attachments/assets/52447245-3a49-4d36-ab46-45a8bf676834" />
+### Execution Policy (Lab note)
+For lab use only (don’t do this on a real production machine):
+```powershell```
+Set-ExecutionPolicy Unrestricted 
 
-Now to be able to Run all scripts we need to run and execution ( For Lab purposes only, we are going to bypass this security feature to run scripts in your powershell, it is not advisable to run scripts from Internet into your PC)
-Write: Set-ExecutionPolicy Unrestricted 
-Then click Yes to All
-
-<img width="1920" height="955" alt="VirtualBox_DC _01_01_2026_12_27_56" src="https://github.com/user-attachments/assets/5b89ced6-f5cb-48c8-9ca7-b333940d41d8" /> 
-
-Before Running the script, we need to go inside the folder where the script is at. Type cd for (change directory) then write  C:\Users\your username\Desktop\AD_PS-master. 
-For instance, i'll type cd  C:\Users\a_paraujo\Desktop\AD_PS-master to open my script location. 
+Change directory to your extracted script folder (example):
+cd C:\Users\<your-username>\Desktop\AD_PS-master
 
 <img width="1920" height="955" alt="cd" src="https://github.com/user-attachments/assets/30d8e96d-9485-42fd-97d3-c535a1999b67" />
 
-After you are inside the script location click the Play button to run then click Run once and it will begin creating the users to the domain. 
+Run the script:
 
 <img width="1920" height="955" alt="run script" src="https://github.com/user-attachments/assets/0be2f175-4301-4c11-9945-025e2724bbe0" />
 
-Now when you open the active directory, you will notice that a _USERS folder has been opened with all the users we created in Powershell. 
+Verify _USERS OU is created and populated:
 
-<img width="1920" height="955" alt="Users" src="https://github.com/user-attachments/assets/0def1ed2-ca47-4a50-bf93-55b944b52141" />
+<img width="1920" height="955" alt="Users" src="https://github.com/user-attachments/assets/0def1ed2-ca47-4a50-bf93-55b944b52141" /> ```
+---
 
-## 11) Creating the Client VM 
+## 12) Create the Windows 10 Client VM
 
- Go back to Oracle VIrtualBox Manager and Click New. Then Name it CLient 1, make sure OS is Microsoft Windows and that OS Version is Windows 10 (64 bit) and click Finish.
+Create a new VM named `Client 1` (Windows 10 64-bit):
 
- 
-<img width="781" height="557" alt="Screenshot 2026-01-01 125500" src="https://github.com/user-attachments/assets/deba5a1d-071b-406e-8037-eb46ae61801a" />
+<img width="781" height="557" alt="Create client VM" src="https://github.com/user-attachments/assets/deba5a1d-071b-406e-8037-eb46ae61801a" />
 
-Right click on Client 1 and change any system to preference then on Network change attached to Internal Network and press OK when finished. 
+Set network to **Internal Network**:
 
-<img width="778" height="519" alt="Screenshot 2026-01-01 125637" src="https://github.com/user-attachments/assets/bbb87050-8dea-473a-8b42-204f5501d326" />
+<img width="778" height="519" alt="Client internal network" src="https://github.com/user-attachments/assets/bbb87050-8dea-473a-8b42-204f5501d326" />
 
-Run the Client 1 VM and when the boot windows opens up, click on the windows 10 iso. Remember that the Windows 10 ISO is different than the windows server 2019 ISO.
+Mount Windows 10 ISO (not Server ISO):
 
-<img width="766" height="531" alt="Screenshot 2026-01-01 131128" src="https://github.com/user-attachments/assets/fb0b3a63-2414-492e-96e8-db691649315d" />
+<img width="766" height="531" alt="Select Win10 ISO" src="https://github.com/user-attachments/assets/fb0b3a63-2414-492e-96e8-db691649315d" />
 
-After it boots, click Next then Install. 
+Install steps:
 
-<img width="744" height="573" alt="Screenshot 2026-01-01 131351" src="https://github.com/user-attachments/assets/f65fd91d-e886-4d03-8e91-e25c0a28570a" />
+<img width="744" height="573" alt="Install Win10" src="https://github.com/user-attachments/assets/f65fd91d-e886-4d03-8e91-e25c0a28570a" />
+<img width="1025" height="785" alt="No product key" src="https://github.com/user-attachments/assets/ac3bfb28-68e7-4c48-ad84-759e25e1ac94" />
+<img width="746" height="572" alt="Custom install" src="https://github.com/user-attachments/assets/1dd3b005-6e45-4293-bb9b-0ecbd4ea5c4e" />
 
-Once It installs, click on I Dont have product key then install windows 10 Pro 
+Offline setup:
 
-<img width="1025" height="785" alt="Screenshot 2026-01-01 131522" src="https://github.com/user-attachments/assets/ac3bfb28-68e7-4c48-ad84-759e25e1ac94" />
+<img width="747" height="573" alt="Region" src="https://github.com/user-attachments/assets/71538ec7-7c1c-4687-80b6-71003baf9e41" />
+<img width="748" height="573" alt="No internet" src="https://github.com/user-attachments/assets/fb21a699-8e20-45dd-8f72-ca3e1ab1b0fb" />
+<img width="746" height="575" alt="Limited setup" src="https://github.com/user-attachments/assets/2f840e62-9c57-499e-aec5-851198dc2f16" />
+<img width="744" height="576" alt="Local user" src="https://github.com/user-attachments/assets/05bf11bd-b24f-49dd-ab48-b24a9d7bfbc8" />
+<img width="744" height="573" alt="Finish setup" src="https://github.com/user-attachments/assets/2f840e62-9c57-499e-aec5-851198dc2f16" />
 
-Accept Terms then click on Custom: Windows Install Only (advanced) then click Next to Install.
+---
 
-<img width="746" height="572" alt="Screenshot 2026-01-01 131707" src="https://github.com/user-attachments/assets/1dd3b005-6e45-4293-bb9b-0ecbd4ea5c4e" />
+## 13) Join the Client to the Domain
 
-After it Installs, Click On wherever region you are in 
+Open System settings:
 
-<img width="747" height="573" alt="Screenshot 2026-01-01 132143" src="https://github.com/user-attachments/assets/71538ec7-7c1c-4687-80b0-cb5f40ee7580" />
+<img width="1024" height="768" alt="System" src="https://github.com/user-attachments/assets/103ea906-be3f-4788-93c7-18b65250fa8d" />
 
-Then when the Internet Windows Opens Up, click I dont have Internet. 
+Rename this PC (advanced):
 
-<img width="748" height="573" alt="Screenshot 2026-01-01 132215" src="https://github.com/user-attachments/assets/fb21a699-8e20-45dd-8f72-ca3e1ab1b0fb" />
+<img width="1024" height="768" alt="Rename advanced" src="https://github.com/user-attachments/assets/6b38abf3-3e0f-43dd-8d0a-cfb40ee93109" />
 
-Then click Continue with limited Setup
+Change → rename `Client 1` and join your domain (example `mydomain.com`):
 
-<img width="746" height="575" alt="Screenshot 2026-01-01 132456" src="https://github.com/user-attachments/assets/2f381b21-ec6a-4098-a21d-ca376e7b9d70" />
+<img width="297" height="340" alt="Join domain" src="https://github.com/user-attachments/assets/87388399-7457-4cbd-89fe-3b0e812594a4" />
+<img width="297" height="338" alt="Domain name" src="https://github.com/user-attachments/assets/b36072d4-6feb-4482-ba39-4cc0fb73ffdd" />
 
-For whos going to use this PC, write user
+When prompted, sign in with a domain user created earlier.  
+> In this lab script, the password is set to `Password1` for learning purposes.
 
-<img width="744" height="576" alt="Screenshot 2026-01-01 132641" src="https://github.com/user-attachments/assets/05bf11bd-b24f-49dd-ab48-b24a9d7bfbc8" />
+<img width="328" height="216" alt="Domain login prompt" src="https://github.com/user-attachments/assets/8f73a2b5-46a9-4524-9b90-75ddd8afb8a0" />
 
-Then click next then Not Now and it will take you to this screen 
+While restarting, verify the DHCP lease (Scope → Address Leases):
 
-<img width="744" height="573" alt="Screenshot 2026-01-01 132831" src="https://github.com/user-attachments/assets/2f840e62-9c57-499e-aec5-851198dc2f16" />
+<img width="838" height="560" alt="DHCP lease" src="https://github.com/user-attachments/assets/b929ffdb-9cde-42c2-bdb7-e181c96a3fe3" />
 
-Once it loads, Right Click on the windows button then System 
+Log in to the client using **Other user** and your domain credentials:
 
-<img width="1024" height="768" alt="VirtualBox_Client 1_01_01_2026_13_42_19" src="https://github.com/user-attachments/assets/103ea906-be3f-4788-93c7-18b65250fa8d" />
+<img width="745" height="577" alt="Other user domain" src="https://github.com/user-attachments/assets/ab3bb858-6977-4c25-888d-f1f5dbaf5973" />
+<img width="745" height="576" alt="Login" src="https://github.com/user-attachments/assets/456d3565-e4ca-4c34-9aa8-0ac08afb4c05" />
 
-Then scroll down and click on Rename this PC (advanced) 
+Success:
 
-<img width="1024" height="768" alt="VirtualBox_Client 1_01_01_2026_13_42_43" src="https://github.com/user-attachments/assets/6b38abf3-3e0f-43dd-8d0a-cfb40ee93109" />
+<img width="745" height="576" alt="Domain joined" src="https://github.com/user-attachments/assets/9c17c706-9c39-4362-af18-9dc39a2ecf6a" />
 
-Then click Change then Remane it Client 1 and click Member of and write down the domain you created. In my example it will be mydomain.com
+---
 
-<img width="297" height="340" alt="Screenshot 2026-01-01 134655" src="https://github.com/user-attachments/assets/87388399-7457-4cbd-89fe-3b0e812594a4" />
+## Scripts (click to view)
 
-<img width="297" height="338" alt="Screenshot 2026-01-01 134909" src="https://github.com/user-attachments/assets/b36072d4-6feb-4482-ba39-4cc0fb73ffdd" />
+> ⚠️ If this README is inside the `active-directory-lab-scripts` folder, keep these links as-is.
+> If your README is at the repo root, update the links to: `./active-directory-lab-scripts/scripts/`
 
-Then it will ask you to create an account. This account is based on the list of users we created earlier. When we added our names to the list of users, the powershell script that we ran ealier created a list of users from that list starting with first name initials to last name. It also created your password to be Password1
-Ex: username: paraujo 
-Password: Password1
+- **Scripts folder:** [Open here](./scripts/)
+- **Example script:** [Create Users](./scripts/1_CREATE_USERS.ps1)
 
-<img width="328" height="216" alt="image" src="https://github.com/user-attachments/assets/8f73a2b5-46a9-4524-9b90-75ddd8afb8a0" />
+> Tip: You can open any `.ps1` file on GitHub and click **Raw** to download it.
 
-Then click Ok then close and your computer will restart now. 
-< br/> 
+---
 
-While the pc restarts, lets go back to our Domain and check out our DHCP. If you dont know how to get into the DHCP, just click Windows, server manager, then tools on the top right then DHCP.
-If you click on scope then Address leases, it will show the newly added account that we just added in the Client Server then it will show a new address that the DHCP gave when we added the account to the domain.
+## Project structure
+ActiveDirectoryLab/
+├── active-directory-lab-scripts/
+│ ├── scripts/
+│ ├── data/
+│ └── docs/
+└── README.md
 
-<img width="838" height="560" alt="Screenshot 2026-01-01 144808" src="https://github.com/user-attachments/assets/b929ffdb-9cde-42c2-bdb7-e181c96a3fe3" />
+---
 
-Now that the Client VM is all done, instead of logging in User, click other user and you will notice that the sign in to is your domain name. Sign in using the log in from before. Ex: username: paraujo 
-Password: Password1
+## Resume-ready bullets
+You can copy these into your resume or LinkedIn:
 
-<img width="745" height="577" alt="Screenshot 2026-01-01 145412" src="https://github.com/user-attachments/assets/ab3bb858-6977-4c25-888d-f1f5dbaf5973" />
-
-<img width="745" height="576" alt="Screenshot 2026-01-01 145444" src="https://github.com/user-attachments/assets/456d3565-e4ca-4c34-9aa8-0ac08afb4c05" />
-
-Now you created a client account to your domain. 
-
-<img width="745" height="576" alt="Screenshot 2026-01-01 150003" src="https://github.com/user-attachments/assets/9c17c706-9c39-4362-af18-9dc39a2ecf6a" />
-
+- Built an **Active Directory Domain** in VirtualBox using **Windows Server 2019** (AD DS + DNS), including OU/user provisioning and domain authentication testing.
+- Configured **dual-network adapters (NAT + Internal)** to isolate lab traffic while enabling controlled internet access.
+- Deployed **RRAS (NAT)** and a **DHCP server with scoped IP ranges** to support domain-joined client provisioning.
+- Automated user creation using **PowerShell scripts** and validated results through **Active Directory Users and Computers** and DHCP leases.
 
 ---
 
 ## Troubleshooting
-**1) I can’t find the domain controller from the client**
-- Make sure the client VM is on the **Internal Network** (Adapter 2)
-- Client DNS should point to the DC’s internal IP (example: `172.16.0.1`)
+**1) Client can’t find the domain**
+- Confirm Client NIC is **Internal Network**
+- Confirm Client DNS points to **172.16.0.1**
+- Confirm DC internal adapter is set to **172.16.0.1/24**
 
-**2) No internet in the lab**
-- Ensure Adapter 1 is **NAT**
-- Ensure RRAS NAT is configured on the **Internet/NAT** interface
+**2) Client gets no IP**
+- Confirm DHCP server is **Authorized**
+- Confirm scope is **Active**
+- Confirm client is on the same internal network
 
-**3) Accidentally installed Server Core (no GUI)**
-- Reinstall and choose **Desktop Experience**
+**3) No internet**
+- DC Adapter 1 must be **NAT**
+- RRAS must be configured with **Internet** as the public interface
 
 ---
 
 ## Roadmap / Next steps
-To make this lab stand out even more, here are strong “resume-ready” additions:
-
-- [ ] **Create the Windows 10 client VM** and join it to the domain
-- [ ] Create additional OUs: `_WORKSTATIONS`, `_USERS`, `_SERVERS`
-- [ ] Add **Group Policy (GPO)** examples:
-  - Password policy
-  - Disable Control Panel
-  - Map a network drive
-  - Deploy a desktop wallpaper
-- [ ] Enable **DHCP** for the internal network
-- [ ] Create a file share + permissions (NTFS + share permissions)
-- [ ] Add a simple **PowerShell script** to bulk-create users from CSV
-- [ ] Add a basic **network diagram** (even a simple image is fine)
+- [ ] Add OUs: `_WORKSTATIONS`, `_SERVERS`
+- [ ] Add basic GPOs (password policy, mapped drive, wallpaper)
+- [ ] Add file server share + NTFS permissions
+- [ ] Add CSV-based user provisioning with PowerShell
+- [ ] Add a simple diagram image (draw.io) to replace the ASCII diagram
 
 ---
 
 ## Disclaimer
-This lab is for learning and testing in a controlled environment. Do not expose these VMs directly to the public internet.
+This lab is for learning/testing in a controlled environment. Do not expose these VMs directly to the public internet.
+
+
+
+
+
+
+
