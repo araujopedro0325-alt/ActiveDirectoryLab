@@ -40,7 +40,6 @@ A beginner-friendly home lab that teaches the fundamentals of <b>Active Director
   - [13) Join the Client to the Domain](#13-join-the-client-to-the-domain)
 - [Scripts (click to view)](#scripts-click-to-view)
 - [Project structure](#project-structure)
-- [Resume-ready bullets](#resume-ready-bullets)
 - [Troubleshooting](#troubleshooting)
 - [Roadmap / Next steps](#roadmap--next-steps)
 - [Disclaimer](#disclaimer)
@@ -479,16 +478,6 @@ ActiveDirectoryLab/
 │ ├── data/
 │ └── docs/
 └── README.md
-
----
-
-## Resume-ready bullets
-You can copy these into your resume or LinkedIn:
-
-- Built an **Active Directory Domain** in VirtualBox using **Windows Server 2019** (AD DS + DNS), including OU/user provisioning and domain authentication testing.
-- Configured **dual-network adapters (NAT + Internal)** to isolate lab traffic while enabling controlled internet access.
-- Deployed **RRAS (NAT)** and a **DHCP server with scoped IP ranges** to support domain-joined client provisioning.
-- Automated user creation using **PowerShell scripts** and validated results through **Active Directory Users and Computers** and DHCP leases.
 
 ---
 
