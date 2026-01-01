@@ -323,13 +323,19 @@ Keep clicking Next until you get to Router (Default Gateway). Type in 172.16.0.1
 
 download this folder https://codeload.github.com/araujopedro0325-alt/ActiveDirectoryLab/zip/refs/heads/main
 
-
 Open up Internet Explorer, Paste link and save the file to Desktop 
 
 <br /> 
 
-Click the Windows button then right click on Windows Powershell ISE and Run as Administrator 
+Open the files and click on the file where it says names.txt
 
+<img width="629" height="116" alt="Screenshot 2026-01-01 144116" src="https://github.com/user-attachments/assets/2e738ee6-c307-42cb-bd7a-f5b0d0a7b7c2" />
+
+Write your first and last name to the list then click save. This is the list of users we are going to add to the domain. 
+
+<img width="1430" height="706" alt="Screenshot 2026-01-01 143928" src="https://github.com/user-attachments/assets/de0ef38e-88db-40be-89b8-261cbd3fb00e" />
+
+Click the Windows button then right click on Windows Powershell ISE and Run as Administrator 
 
 <img width="1920" height="955" alt="VirtualBox_DC _01_01_2026_12_13_57" src="https://github.com/user-attachments/assets/5a115a8b-2ebd-44ee-89a0-2ccbe2176a0a" />
 
@@ -383,7 +389,65 @@ Accept Terms then click on Custom: Windows Install Only (advanced) then click Ne
 
 <img width="746" height="572" alt="Screenshot 2026-01-01 131707" src="https://github.com/user-attachments/assets/1dd3b005-6e45-4293-bb9b-0ecbd4ea5c4e" />
 
-After it Installs, Click On wherever region you are in then 
+After it Installs, Click On wherever region you are in 
+
+<img width="747" height="573" alt="Screenshot 2026-01-01 132143" src="https://github.com/user-attachments/assets/71538ec7-7c1c-4687-80b0-cb5f40ee7580" />
+
+Then when the Internet Windows Opens Up, click I dont have Internet. 
+
+<img width="748" height="573" alt="Screenshot 2026-01-01 132215" src="https://github.com/user-attachments/assets/fb21a699-8e20-45dd-8f72-ca3e1ab1b0fb" />
+
+Then click Continue with limited Setup
+
+<img width="746" height="575" alt="Screenshot 2026-01-01 132456" src="https://github.com/user-attachments/assets/2f381b21-ec6a-4098-a21d-ca376e7b9d70" />
+
+For whos going to use this PC, write user
+
+<img width="744" height="576" alt="Screenshot 2026-01-01 132641" src="https://github.com/user-attachments/assets/05bf11bd-b24f-49dd-ab48-b24a9d7bfbc8" />
+
+Then click next then Not Now and it will take you to this screen 
+
+<img width="744" height="573" alt="Screenshot 2026-01-01 132831" src="https://github.com/user-attachments/assets/2f840e62-9c57-499e-aec5-851198dc2f16" />
+
+Once it loads, Right Click on the windows button then System 
+
+<img width="1024" height="768" alt="VirtualBox_Client 1_01_01_2026_13_42_19" src="https://github.com/user-attachments/assets/103ea906-be3f-4788-93c7-18b65250fa8d" />
+
+Then scroll down and click on Rename this PC (advanced) 
+
+<img width="1024" height="768" alt="VirtualBox_Client 1_01_01_2026_13_42_43" src="https://github.com/user-attachments/assets/6b38abf3-3e0f-43dd-8d0a-cfb40ee93109" />
+
+Then click Change then Remane it Client 1 and click Member of and write down the domain you created. In my example it will be mydomain.com
+
+<img width="297" height="340" alt="Screenshot 2026-01-01 134655" src="https://github.com/user-attachments/assets/87388399-7457-4cbd-89fe-3b0e812594a4" />
+
+<img width="297" height="338" alt="Screenshot 2026-01-01 134909" src="https://github.com/user-attachments/assets/b36072d4-6feb-4482-ba39-4cc0fb73ffdd" />
+
+Then it will ask you to create an account. This account is based on the list of users we created earlier. When we added our names to the list of users, the powershell script that we ran ealier created a list of users from that list starting with first name initials to last name. It also created your password to be Password1
+Ex: username: paraujo 
+Password: Password1
+
+<img width="328" height="216" alt="image" src="https://github.com/user-attachments/assets/8f73a2b5-46a9-4524-9b90-75ddd8afb8a0" />
+
+Then click Ok then close and your computer will restart now. 
+< br/> 
+
+While the pc restarts, lets go back to our Domain and check out our DHCP. If you dont know how to get into the DHCP, just click Windows, server manager, then tools on the top right then DHCP.
+If you click on scope then Address leases, it will show the newly added account that we just added in the Client Server then it will show a new address that the DHCP gave when we added the account to the domain.
+
+<img width="838" height="560" alt="Screenshot 2026-01-01 144808" src="https://github.com/user-attachments/assets/b929ffdb-9cde-42c2-bdb7-e181c96a3fe3" />
+
+Now that the Client VM is all done, instead of logging in User, click other user and you will notice that the sign in to is your domain name. Sign in using the log in from before. Ex: username: paraujo 
+Password: Password1
+
+<img width="745" height="577" alt="Screenshot 2026-01-01 145412" src="https://github.com/user-attachments/assets/ab3bb858-6977-4c25-888d-f1f5dbaf5973" />
+
+<img width="745" height="576" alt="Screenshot 2026-01-01 145444" src="https://github.com/user-attachments/assets/456d3565-e4ca-4c34-9aa8-0ac08afb4c05" />
+
+Now you created a client account to your domain. 
+
+<img width="745" height="576" alt="Screenshot 2026-01-01 150003" src="https://github.com/user-attachments/assets/9c17c706-9c39-4362-af18-9dc39a2ecf6a" />
+
 
 ---
 
