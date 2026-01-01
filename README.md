@@ -324,7 +324,66 @@ Keep clicking Next until you get to Router (Default Gateway). Type in 172.16.0.1
 download this folder https://codeload.github.com/araujopedro0325-alt/ActiveDirectoryLab/zip/refs/heads/main
 
 
-Open up Internet Explorer and Paste link 
+Open up Internet Explorer, Paste link and save the file to Desktop 
+
+<br /> 
+
+Click the Windows button then right click on Windows Powershell ISE and Run as Administrator 
+
+
+<img width="1920" height="955" alt="VirtualBox_DC _01_01_2026_12_13_57" src="https://github.com/user-attachments/assets/5a115a8b-2ebd-44ee-89a0-2ccbe2176a0a" />
+
+Once you are inside Powershel open the saved file and click on 1_CREATE_USERS 
+
+<img width="630" height="342" alt="Screenshot 2025-12-20 165939" src="https://github.com/user-attachments/assets/52447245-3a49-4d36-ab46-45a8bf676834" />
+
+Now to be able to Run all scripts we need to run and execution ( For Lab purposes only, we are going to bypass this security feature to run scripts in your powershell, it is not advisable to run scripts from Internet into your PC)
+Write: Set-ExecutionPolicy Unrestricted 
+Then click Yes to All
+
+<img width="1920" height="955" alt="VirtualBox_DC _01_01_2026_12_27_56" src="https://github.com/user-attachments/assets/5b89ced6-f5cb-48c8-9ca7-b333940d41d8" /> 
+
+Before Running the script, we need to go inside the folder where the script is at. Type cd for (change directory) then write  C:\Users\your username\Desktop\AD_PS-master. 
+For instance, i'll type cd  C:\Users\a_paraujo\Desktop\AD_PS-master to open my script location. 
+
+<img width="1920" height="955" alt="cd" src="https://github.com/user-attachments/assets/30d8e96d-9485-42fd-97d3-c535a1999b67" />
+
+After you are inside the script location click the Play button to run then click Run once and it will begin creating the users to the domain. 
+
+<img width="1920" height="955" alt="run script" src="https://github.com/user-attachments/assets/0be2f175-4301-4c11-9945-025e2724bbe0" />
+
+Now when you open the active directory, you will notice that a _USERS folder has been opened with all the users we created in Powershell. 
+
+<img width="1920" height="955" alt="Users" src="https://github.com/user-attachments/assets/0def1ed2-ca47-4a50-bf93-55b944b52141" />
+
+## 11) Creating the Client VM 
+
+ Go back to Oracle VIrtualBox Manager and Click New. Then Name it CLient 1, make sure OS is Microsoft Windows and that OS Version is Windows 10 (64 bit) and click Finish.
+
+ 
+<img width="781" height="557" alt="Screenshot 2026-01-01 125500" src="https://github.com/user-attachments/assets/deba5a1d-071b-406e-8037-eb46ae61801a" />
+
+Right click on Client 1 and change any system to preference then on Network change attached to Internal Network and press OK when finished. 
+
+<img width="778" height="519" alt="Screenshot 2026-01-01 125637" src="https://github.com/user-attachments/assets/bbb87050-8dea-473a-8b42-204f5501d326" />
+
+Run the Client 1 VM and when the boot windows opens up, click on the windows 10 iso. Remember that the Windows 10 ISO is different than the windows server 2019 ISO.
+
+<img width="766" height="531" alt="Screenshot 2026-01-01 131128" src="https://github.com/user-attachments/assets/fb0b3a63-2414-492e-96e8-db691649315d" />
+
+After it boots, click Next then Install. 
+
+<img width="744" height="573" alt="Screenshot 2026-01-01 131351" src="https://github.com/user-attachments/assets/f65fd91d-e886-4d03-8e91-e25c0a28570a" />
+
+Once It installs, click on I Dont have product key then install windows 10 Pro 
+
+<img width="1025" height="785" alt="Screenshot 2026-01-01 131522" src="https://github.com/user-attachments/assets/ac3bfb28-68e7-4c48-ad84-759e25e1ac94" />
+
+Accept Terms then click on Custom: Windows Install Only (advanced) then click Next to Install.
+
+<img width="746" height="572" alt="Screenshot 2026-01-01 131707" src="https://github.com/user-attachments/assets/1dd3b005-6e45-4293-bb9b-0ecbd4ea5c4e" />
+
+After it Installs, Click On wherever region you are in then 
 
 ---
 
